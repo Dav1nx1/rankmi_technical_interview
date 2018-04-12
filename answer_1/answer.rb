@@ -10,11 +10,11 @@ def update_user user_data
     user = User.new
     # status pasa a ser el retorno del metodo save
     status = user.save
-
+    # retorna el estatus en caso de que sea falso.
     return status unless status
 
     if status
-
+      # Se une la logica que estaba dividida en 2 if, para manejarlos en 1 solo
       if user_role.present? && process_id.present? && user_id.present?
         user_role_process_data = UserRoleProcess.where(user_id: user_id, role_id: user_role, enterprise_process_id: process_id)
         if user_role_process_data.empty?
@@ -30,4 +30,4 @@ def update_user user_data
   rescue Exception => e
     #Manejo de excepción
   end
-endz
+end
