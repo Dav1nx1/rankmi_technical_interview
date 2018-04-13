@@ -1,0 +1,8 @@
+
+*.log
+
+answer_3/tmp/pids/
+
+answer_3/tmp/
+
+answer_3/log/

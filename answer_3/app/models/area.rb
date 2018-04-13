@@ -1,7 +1,9 @@
 class Area < ActiveRecord::Base
-  belongs_to :parent, class_name: 'Area'
+  belongs_to :parent, class_name: 'Area', optional: true
   has_many :children, class_name: 'Area',
                       foreign_key: 'parent_id'
+
+  after_save :update_qualify
 
   def parent_name
     # it may not have a parent
@@ -14,6 +16,13 @@ class Area < ActiveRecord::Base
 
   def has_children?
     children.exists?
+  end
+
+  def update_qualify
+    return unless has_parent?
+    chidrens = parent.children
+    parent.nota = parent.children.map(&:nota).inject(0, &:+) / parent.children.size
+    parent.save
   end
 
   def to_json_output
