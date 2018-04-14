@@ -3,30 +3,28 @@ class Area < ActiveRecord::Base
   has_many :children, class_name: 'Area',
                       foreign_key: 'parent_id'
 
+  validates_presence_of :name, :nota
+
   after_save :update_qualify
 
-  def parent_name
-    # it may not have a parent
-    parent.try(:name)
-  end
-
-  def has_parent?
+  def parent?
+    # Valida que el area, seleccionada, tiene un area padre. 
     parent.present?
   end
 
-  def has_children?
-    children.exists?
-  end
-
   def update_qualify
-    return unless has_parent?
-    chidrens = parent.children
-    parent.nota = parent.children.map(&:nota).inject(0, &:+) / parent.children.size
-    parent.save
+    # Maneja las actualizaciones, segun la logica de negocio, indica que si se
+    # actualiza un area sus areas padres son actualizadas con el promedio
+    # de sus hijos, y asi recursivamente.
+    return unless parent?
+    ActiveRecord::Base.transaction do
+      parent.nota = parent.children.map(&:nota).inject(0, &:+) / parent.children.size
+      parent.save
+    end
   end
 
   def to_json_output
+    # Metodo que maneja la impresion tipo arbol, para el index
     attributes.merge(children: children.map(&:to_json_output))
   end
-
 end
