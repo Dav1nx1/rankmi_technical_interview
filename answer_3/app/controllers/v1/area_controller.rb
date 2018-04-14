@@ -15,7 +15,7 @@ module V1
     def create
       # permite agregar una nueva area, no es dependiente si tiene un padre o no
       @area = Area.new area_params
-      respond @area, 200 if @area.save
+      return respond @area, 200 if @area.save
       respond nil, 500
     end
 
