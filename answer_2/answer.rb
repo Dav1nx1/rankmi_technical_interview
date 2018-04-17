@@ -12,7 +12,7 @@ def answer_target(numbers, target)
   # se agrego el uso de uniq, para eliminar duplicidades en el array
   # se borraron metodos no usados (any?)
   # se elimina el return, para mostrar todas las posibles respuestas dentro del array
-  numbers.uniq.combination(2) { |a, b| p "index1 : #{numbers.index(a)} index2 : #{numbers.index(b)}" if a+b == target }.size
+  numbers.uniq.combination(2) { |a, b| p "index1 : #{numbers.index(a)} index2 : #{numbers.index(b)}" if a+b == target }
   "Compĺetado."
 end
 
